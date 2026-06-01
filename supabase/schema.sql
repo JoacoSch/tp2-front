@@ -22,3 +22,8 @@ CREATE POLICY "insert own items" ON items
 
 CREATE POLICY "delete own items" ON items
   FOR DELETE USING (auth.uid() = user_id);
+
+CREATE POLICY "update own items" ON items
+  FOR UPDATE USING (auth.uid() = user_id);
+
+ALTER TABLE items ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();

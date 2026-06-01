@@ -27,6 +27,27 @@ export async function addItem(formData: FormData) {
   redirect('/dashboard')
 }
 
+export async function updateItem(id: string, formData: FormData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const title = formData.get('title') as string
+  const type = formData.get('type') as string
+  const status = formData.get('status') as string
+  const notes = (formData.get('notes') as string) || null
+
+  const { error } = await supabase
+    .from('items')
+    .update({ title, type, status, notes, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .eq('user_id', user.id)
+
+  if (error) throw new Error(error.message)
+
+  redirect('/dashboard')
+}
+
 export async function deleteItem(id: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()

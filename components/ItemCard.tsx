@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import { deleteItem } from '@/app/actions'
 
 const TYPE_LABELS: Record<string, string> = {
@@ -39,15 +40,24 @@ export default function ItemCard({ item }: { item: Item }) {
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex flex-col gap-2 hover:border-zinc-700 transition-colors">
       <div className="flex items-start justify-between gap-2">
         <h3 className="font-medium leading-tight">{item.title}</h3>
-        <form action={handleDelete}>
-          <button
-            type="submit"
-            className="text-zinc-600 hover:text-red-400 transition-colors text-sm shrink-0"
-            title="Eliminar"
+        <div className="flex items-center gap-2 shrink-0">
+          <Link
+            href={`/edit/${item.id}`}
+            className="text-zinc-600 hover:text-violet-400 transition-colors text-sm"
+            title="Editar"
           >
-            ✕
-          </button>
-        </form>
+            ✎
+          </Link>
+          <form action={handleDelete}>
+            <button
+              type="submit"
+              className="text-zinc-600 hover:text-red-400 transition-colors text-sm"
+              title="Eliminar"
+            >
+              ✕
+            </button>
+          </form>
+        </div>
       </div>
 
       <div className="flex items-center gap-2 flex-wrap">
