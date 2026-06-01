@@ -66,26 +66,24 @@ export async function upsertProfile(formData: FormData) {
       .from('avatars')
       .upload(path, bytes, { contentType: file.type, upsert: true })
 
-    if (uploadError) throw new Error(uploadError.message)
-
-    const { data: { publicUrl } } = supabase.storage
-      .from('avatars')
-      .getPublicUrl(path)
-
-    avatar_url = publicUrl
+      if (!uploadError) {
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(path)
+      avatar_url = publicUrl
+    }
   }
 
-  const { error } = await supabase.from('profiles').upsert({
+  await supabase.from('profiles').upsert({
     id: user.id,
     display_name,
     ...(avatar_url !== undefined && { avatar_url }),
     updated_at: new Date().toISOString(),
   })
 
-  if (error) throw new Error(error.message)
-
   revalidatePath('/profile')
   revalidatePath('/', 'layout')
+  redirect('/profile')
 }
 
 export async function deleteItem(id: string) {
