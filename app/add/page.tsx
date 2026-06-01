@@ -1,5 +1,6 @@
 import { addItem } from '@/app/actions'
 import Link from 'next/link'
+import SubmitButton from '@/components/SubmitButton'
 
 export default function AddPage() {
   return (
@@ -63,12 +64,7 @@ export default function AddPage() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-violet-600 hover:bg-violet-500 text-white font-medium rounded-lg py-2 text-sm transition-colors"
-        >
-          Agregar a mi lista
-        </button>
+        <SubmitButton label="Agregar a mi lista" pendingLabel="Agregando..." />
       </form>
     </div>
   )

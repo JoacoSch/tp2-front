@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { upsertProfile } from '@/app/actions'
+import SubmitButton from '@/components/SubmitButton'
 
 export default async function ProfilePage() {
   const supabase = await createClient()
@@ -71,12 +72,7 @@ export default async function ProfilePage() {
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-violet-600 hover:bg-violet-500 text-white font-medium rounded-lg py-2 text-sm transition-colors"
-        >
-          Guardar cambios
-        </button>
+        <SubmitButton label="Guardar cambios" pendingLabel="Guardando..." />
       </form>
     </div>
   )

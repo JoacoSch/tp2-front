@@ -2,6 +2,7 @@ import { createClient } from '@/lib/supabase/server'
 import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { updateItem } from '@/app/actions'
+import SubmitButton from '@/components/SubmitButton'
 
 export default async function EditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -81,12 +82,7 @@ export default async function EditPage({ params }: { params: Promise<{ id: strin
           />
         </div>
 
-        <button
-          type="submit"
-          className="w-full bg-violet-600 hover:bg-violet-500 text-white font-medium rounded-lg py-2 text-sm transition-colors"
-        >
-          Guardar cambios
-        </button>
+        <SubmitButton label="Guardar cambios" pendingLabel="Guardando..." />
       </form>
     </div>
   )
