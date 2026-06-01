@@ -71,7 +71,7 @@ CREATE POLICY "delete own items" ON items FOR DELETE USING (auth.uid() = user_id
 
 ## Deploy
 
-La aplicación está desplegada en Vercel: [link al deploy]
+La aplicación está desplegada en Vercel: [https://tp2-front-joaquins-projects-bae6c991.vercel.app](https://tp2-front-joaquins-projects-bae6c991.vercel.app)
 
 ## Integrantes
 
