@@ -46,3 +46,21 @@ CREATE POLICY "insert own profile" ON profiles
 
 CREATE POLICY "update own profile" ON profiles
   FOR UPDATE USING (auth.uid() = id);
+
+-- Storage: bucket de avatares (CDN público)
+-- Ejecutar en Supabase SQL Editor o crear el bucket desde el dashboard
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('avatars', 'avatars', true)
+ON CONFLICT DO NOTHING;
+
+CREATE POLICY "upload own avatar" ON storage.objects
+  FOR INSERT WITH CHECK (bucket_id = 'avatars' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "update own avatar" ON storage.objects
+  FOR UPDATE USING (bucket_id = 'avatars' AND auth.uid()::text = (storage.foldername(name))[1]);
+
+CREATE POLICY "public read avatars" ON storage.objects
+  FOR SELECT USING (bucket_id = 'avatars');
+
+CREATE POLICY "delete own avatar" ON storage.objects
+  FOR DELETE USING (bucket_id = 'avatars' AND auth.uid()::text = (storage.foldername(name))[1]);

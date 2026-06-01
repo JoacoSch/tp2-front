@@ -55,9 +55,30 @@ export async function upsertProfile(formData: FormData) {
 
   const display_name = (formData.get('display_name') as string).trim() || null
 
+  let avatar_url: string | undefined = undefined
+
+  const file = formData.get('avatar') as File | null
+  if (file && file.size > 0) {
+    const bytes = await file.arrayBuffer()
+    const path = `${user.id}/avatar`
+
+    const { error: uploadError } = await supabase.storage
+      .from('avatars')
+      .upload(path, bytes, { contentType: file.type, upsert: true })
+
+    if (uploadError) throw new Error(uploadError.message)
+
+    const { data: { publicUrl } } = supabase.storage
+      .from('avatars')
+      .getPublicUrl(path)
+
+    avatar_url = publicUrl
+  }
+
   const { error } = await supabase.from('profiles').upsert({
     id: user.id,
     display_name,
+    ...(avatar_url !== undefined && { avatar_url }),
     updated_at: new Date().toISOString(),
   })
 

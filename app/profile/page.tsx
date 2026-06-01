@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { upsertProfile } from '@/app/actions'
 
 export default async function ProfilePage() {
@@ -14,6 +15,8 @@ export default async function ProfilePage() {
     .eq('id', user.id)
     .single()
 
+  const initial = (profile?.display_name || user.email || '?').charAt(0).toUpperCase()
+
   return (
     <div className="max-w-lg">
       <div className="mb-6">
@@ -23,7 +26,32 @@ export default async function ProfilePage() {
         <h1 className="text-2xl font-bold mt-3">Mi perfil</h1>
       </div>
 
-      <form action={upsertProfile} className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-4">
+      <form action={upsertProfile} encType="multipart/form-data" className="bg-zinc-900 border border-zinc-800 rounded-2xl p-6 space-y-5">
+        <div className="flex flex-col items-center gap-3">
+          {profile?.avatar_url ? (
+            <Image
+              src={profile.avatar_url}
+              alt="Avatar"
+              width={80}
+              height={80}
+              className="rounded-full object-cover"
+            />
+          ) : (
+            <span className="w-20 h-20 rounded-full bg-violet-600 flex items-center justify-center text-2xl font-bold">
+              {initial}
+            </span>
+          )}
+          <div className="space-y-1 w-full">
+            <label className="text-sm text-zinc-400">Foto de perfil</label>
+            <input
+              name="avatar"
+              type="file"
+              accept="image/*"
+              className="w-full text-sm text-zinc-400 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-violet-600 file:text-white hover:file:bg-violet-500 file:cursor-pointer"
+            />
+          </div>
+        </div>
+
         <div className="space-y-1">
           <label className="text-sm text-zinc-400">Email</label>
           <input
