@@ -5,7 +5,7 @@ CREATE TABLE items (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users NOT NULL,
   title TEXT NOT NULL,
-  type TEXT NOT NULL CHECK (type IN ('movie','series','book','podcast','other')),
+  type TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'want' CHECK (status IN ('want','in_progress','done')),
   notes TEXT,
   created_at TIMESTAMPTZ DEFAULT NOW()

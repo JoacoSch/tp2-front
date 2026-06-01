@@ -3,6 +3,7 @@ import { redirect, notFound } from 'next/navigation'
 import Link from 'next/link'
 import { updateItem } from '@/app/actions'
 import SubmitButton from '@/components/SubmitButton'
+import TypeSelector from '@/components/TypeSelector'
 
 export default async function EditPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
@@ -43,18 +44,7 @@ export default async function EditPage({ params }: { params: Promise<{ id: strin
 
         <div className="space-y-1">
           <label className="text-sm text-zinc-400">Tipo *</label>
-          <select
-            name="type"
-            required
-            defaultValue={item.type}
-            className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-violet-500 transition-colors"
-          >
-            <option value="movie">🎬 Película</option>
-            <option value="series">📺 Serie</option>
-            <option value="book">📚 Libro</option>
-            <option value="podcast">🎙️ Podcast</option>
-            <option value="other">✨ Otro</option>
-          </select>
+          <TypeSelector defaultValue={item.type} />
         </div>
 
         <div className="space-y-1">
@@ -65,9 +55,9 @@ export default async function EditPage({ params }: { params: Promise<{ id: strin
             defaultValue={item.status}
             className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-violet-500 transition-colors"
           >
-            <option value="want">⏳ Quiero ver/leer</option>
-            <option value="in_progress">▶️ En progreso</option>
-            <option value="done">✅ Terminado</option>
+            <option value="want">Quiero ver/leer</option>
+            <option value="in_progress">En progreso</option>
+            <option value="done">Terminado</option>
           </select>
         </div>
 

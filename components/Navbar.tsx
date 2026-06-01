@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { LogOut } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 
 interface NavbarProps {
@@ -55,9 +56,10 @@ export default function Navbar({ userEmail, displayName, avatarUrl }: NavbarProp
             </Link>
             <button
               onClick={handleLogout}
-              className="text-sm text-zinc-400 hover:text-white transition-colors"
+              className="text-zinc-400 hover:text-white transition-colors"
+              title="Cerrar sesión"
             >
-              Salir
+              <LogOut size={16} />
             </button>
           </div>
         )}

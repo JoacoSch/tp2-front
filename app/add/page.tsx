@@ -1,6 +1,7 @@
 import { addItem } from '@/app/actions'
 import Link from 'next/link'
 import SubmitButton from '@/components/SubmitButton'
+import TypeSelector from '@/components/TypeSelector'
 
 export default function AddPage() {
   return (
@@ -25,19 +26,7 @@ export default function AddPage() {
 
         <div className="space-y-1">
           <label className="text-sm text-zinc-400">Tipo *</label>
-          <select
-            name="type"
-            required
-            defaultValue=""
-            className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-violet-500 transition-colors"
-          >
-            <option value="" disabled>Seleccioná un tipo</option>
-            <option value="movie">🎬 Película</option>
-            <option value="series">📺 Serie</option>
-            <option value="book">📚 Libro</option>
-            <option value="podcast">🎙️ Podcast</option>
-            <option value="other">✨ Otro</option>
-          </select>
+          <TypeSelector />
         </div>
 
         <div className="space-y-1">
@@ -48,9 +37,8 @@ export default function AddPage() {
             defaultValue="want"
             className="w-full bg-zinc-800 border border-zinc-700 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-violet-500 transition-colors"
           >
-            <option value="want">⏳ Quiero ver/leer</option>
-            <option value="in_progress">▶️ En progreso</option>
-            <option value="done">✅ Terminado</option>
+            <option value="want">Quiero ver/leer</option>
+            <option value="in_progress">En progreso</option>
           </select>
         </div>
 

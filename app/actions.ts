@@ -10,7 +10,9 @@ export async function addItem(formData: FormData) {
   if (!user) redirect('/login')
 
   const title = formData.get('title') as string
-  const type = formData.get('type') as string
+  const typeRaw = formData.get('type') as string
+  const customType = (formData.get('custom_type') as string)?.trim()
+  const type = typeRaw === 'other' && customType ? customType : typeRaw
   const status = formData.get('status') as string
   const notes = (formData.get('notes') as string) || null
 
@@ -33,7 +35,9 @@ export async function updateItem(id: string, formData: FormData) {
   if (!user) redirect('/login')
 
   const title = formData.get('title') as string
-  const type = formData.get('type') as string
+  const typeRaw = formData.get('type') as string
+  const customType = (formData.get('custom_type') as string)?.trim()
+  const type = typeRaw === 'other' && customType ? customType : typeRaw
   const status = formData.get('status') as string
   const notes = (formData.get('notes') as string) || null
 
@@ -84,6 +88,20 @@ export async function upsertProfile(formData: FormData) {
   revalidatePath('/profile')
   revalidatePath('/', 'layout')
   redirect('/profile')
+}
+
+export async function updateItemStatus(id: string, status: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  await supabase
+    .from('items')
+    .update({ status, updated_at: new Date().toISOString() })
+    .eq('id', id)
+    .eq('user_id', user.id)
+
+  revalidatePath('/dashboard')
 }
 
 export async function deleteItem(id: string) {

@@ -16,10 +16,17 @@ interface Props {
   items: Item[]
 }
 
+const PRESET_TYPES = ['movie', 'series', 'book', 'podcast']
+
 export default function DashboardFilters({ items }: Props) {
   const [search, setSearch] = useState('')
   const [typeFilter, setTypeFilter] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
+
+  const uniqueTypes = useMemo(() => {
+    const custom = items.map(i => i.type).filter(t => !PRESET_TYPES.includes(t))
+    return [...new Set(custom)]
+  }, [items])
 
   const filtered = useMemo(() => {
     return items.filter(item => {
@@ -44,17 +51,19 @@ export default function DashboardFilters({ items }: Props) {
         />
         <select value={typeFilter} onChange={e => setTypeFilter(e.target.value)} className={selectClass}>
           <option value="">Todos los tipos</option>
-          <option value="movie">🎬 Película</option>
-          <option value="series">📺 Serie</option>
-          <option value="book">📚 Libro</option>
-          <option value="podcast">🎙️ Podcast</option>
-          <option value="other">✨ Otro</option>
+          <option value="movie">Película</option>
+          <option value="series">Serie</option>
+          <option value="book">Libro</option>
+          <option value="podcast">Podcast</option>
+          {uniqueTypes.map(t => (
+            <option key={t} value={t}>{t}</option>
+          ))}
         </select>
         <select value={statusFilter} onChange={e => setStatusFilter(e.target.value)} className={selectClass}>
           <option value="">Todos los estados</option>
-          <option value="want">⏳ Pendiente</option>
-          <option value="in_progress">▶️ En progreso</option>
-          <option value="done">✅ Terminado</option>
+          <option value="want">Pendiente</option>
+          <option value="in_progress">En progreso</option>
+          <option value="done">Terminado</option>
         </select>
       </div>
 
