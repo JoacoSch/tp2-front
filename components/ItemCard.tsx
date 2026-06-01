@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { deleteItem } from '@/app/actions'
 
@@ -31,10 +33,7 @@ interface Item {
 }
 
 export default function ItemCard({ item }: { item: Item }) {
-  async function handleDelete() {
-    'use server'
-    await deleteItem(item.id)
-  }
+  const deleteAction = deleteItem.bind(null, item.id)
 
   return (
     <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex flex-col gap-2 hover:border-zinc-700 transition-colors">
@@ -48,7 +47,7 @@ export default function ItemCard({ item }: { item: Item }) {
           >
             ✎
           </Link>
-          <form action={handleDelete}>
+          <form action={deleteAction}>
             <button
               type="submit"
               className="text-zinc-600 hover:text-red-400 transition-colors text-sm"
