@@ -27,3 +27,22 @@ CREATE POLICY "update own items" ON items
   FOR UPDATE USING (auth.uid() = user_id);
 
 ALTER TABLE items ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT NOW();
+
+-- Tabla de perfiles de usuario
+CREATE TABLE IF NOT EXISTS profiles (
+  id UUID REFERENCES auth.users PRIMARY KEY,
+  display_name TEXT,
+  avatar_url TEXT,
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "select own profile" ON profiles
+  FOR SELECT USING (auth.uid() = id);
+
+CREATE POLICY "insert own profile" ON profiles
+  FOR INSERT WITH CHECK (auth.uid() = id);
+
+CREATE POLICY "update own profile" ON profiles
+  FOR UPDATE USING (auth.uid() = id);

@@ -15,10 +15,23 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
+  let displayName: string | null = null
+  let avatarUrl: string | null = null
+
+  if (user) {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('display_name, avatar_url')
+      .eq('id', user.id)
+      .single()
+    displayName = profile?.display_name ?? null
+    avatarUrl = profile?.avatar_url ?? null
+  }
+
   return (
     <html lang="es">
       <body className={`${geist.className} bg-zinc-950 text-white min-h-screen`}>
-        <Navbar userEmail={user?.email} />
+        <Navbar userEmail={user?.email} displayName={displayName} avatarUrl={avatarUrl} />
         <main className="max-w-4xl mx-auto px-4 py-8">{children}</main>
       </body>
     </html>

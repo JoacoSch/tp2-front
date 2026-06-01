@@ -48,6 +48,25 @@ export async function updateItem(id: string, formData: FormData) {
   redirect('/dashboard')
 }
 
+export async function upsertProfile(formData: FormData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/login')
+
+  const display_name = (formData.get('display_name') as string).trim() || null
+
+  const { error } = await supabase.from('profiles').upsert({
+    id: user.id,
+    display_name,
+    updated_at: new Date().toISOString(),
+  })
+
+  if (error) throw new Error(error.message)
+
+  revalidatePath('/profile')
+  revalidatePath('/', 'layout')
+}
+
 export async function deleteItem(id: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
